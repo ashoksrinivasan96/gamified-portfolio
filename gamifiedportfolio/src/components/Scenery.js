@@ -9,8 +9,8 @@ const Scenery = ({canvasContext},x,y, image) => {
             x,
             y
         },
-        width: 400,
-        height: 100,
+        width: window.innerWidth,
+        height: window.innerHeight,
 
         
     })
@@ -22,7 +22,7 @@ const Scenery = ({canvasContext},x,y, image) => {
     }
 
 
-   return {drawScenery, platform} 
+   return {drawScenery, scenery} 
 }
 
 export default Scenery;

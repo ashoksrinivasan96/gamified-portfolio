@@ -1,10 +1,19 @@
 import Platform from "./Platform";
 import Player from "./Player";
-import { useState, useEffect } from "react"
+import Scenery from "./Scenery";
+import backgroundImg from '../assets/background.png'
 import platformImg from '../assets/platform.png'
+import backgroundImgLight from '../assets/Backgroundlight.png'
 
 const Game = ({canvasContext}) => {
     const gravity = 1.5;
+    
+    const backgroundScenery = [Scenery({canvasContext}, 0,0, backgroundImg),
+        Scenery({canvasContext}, 1792,0, backgroundImg),
+        Scenery({canvasContext}, 3584,0, backgroundImg),
+        Scenery({canvasContext}, 5376 -200,0, backgroundImgLight)
+    ]
+    
     const platforms = [Platform({canvasContext}, 200, 950, platformImg),
         Platform({canvasContext}, 800,950, platformImg)
     ]
@@ -25,6 +34,9 @@ const Game = ({canvasContext}) => {
         requestAnimationFrame(animate);
         canvasContext.context.clearRect(0,0,canvasContext.canvas.width,canvasContext.canvas.height);
         
+        backgroundScenery.forEach((scenery) =>{
+            scenery.drawScenery();
+        })
         platforms.forEach((platform) => {
             platform.drawPlatform();
         })
@@ -40,6 +52,9 @@ const Game = ({canvasContext}) => {
             player.player.velocity.x = 0;
             if(keys.right.pressed){
                 scrollLength+=5;
+                backgroundScenery.forEach((scenery) =>{
+                    scenery.scenery.position.x -= 3
+                })
                 platforms.forEach((platform) => {
     
                     platform.platform.position.x -= 5
@@ -48,6 +63,9 @@ const Game = ({canvasContext}) => {
             }
             else if(keys.left.pressed){
                 scrollLength-=5;
+                backgroundScenery.forEach((scenery) =>{
+                    scenery.scenery.position.x += 3
+                })
                 platforms.forEach((platform) => {            
                 platform.platform.position.x += 5
                 
