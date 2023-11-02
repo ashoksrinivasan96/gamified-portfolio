@@ -22,7 +22,7 @@ const Platform = ({canvasContext},x,y, image) => {
     }
 
 
-   return {drawPlatform, platform} 
+   return {drawPlatform, platform, setPlatform} 
 }
 
 export default Platform;

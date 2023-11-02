@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Player from './Player';
+import Game from './Game';
 
 
 const Canvas = () => {
@@ -26,7 +27,7 @@ const Canvas = () => {
     return(
     <>
     <canvas ref={canvasRef}></canvas>
-       {isPageLoaded && <Player canvasContext={canvasContext} />}
+       {isPageLoaded && <Game canvasContext={canvasContext} />}
     </>
     
     )
