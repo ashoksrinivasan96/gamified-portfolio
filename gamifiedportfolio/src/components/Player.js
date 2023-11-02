@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react"
 import Platform from "./Platform";
+import platformImg from '../assets/platform.png';
 
 const Player = ({canvasContext}) => {
-const platform = Platform({canvasContext})    
+const platforms = [Platform({canvasContext}, 200, 950, platformImg),
+    Platform({canvasContext}, 800,950, platformImg)
+]  
 const gravity = 1.5;
+let scrollLength = 0;
+
 const keys = {
     right: {
         pressed: false
@@ -46,22 +51,38 @@ const [player, setPlayer] = useState({
     const animate = () => {
         requestAnimationFrame(animate);
         canvasContext.context.clearRect(0,0,canvasContext.canvas.width,canvasContext.canvas.height);
+        
+        platforms.forEach((platform) => {
+            platform.drawPlatform();
+        })
         update();
-        platform.drawPlatform();
         if(keys.right.pressed && player.position.x < 400){
             player.velocity.x = 5;
+            scrollLength+=5;
         }
         else if(keys.left.pressed && player.position.x > 100){
             player.velocity.x = -5;
-        }
-        else {
+            scrollLength-= 5;
+        } else {
             player.velocity.x = 0;
             if(keys.right.pressed){
-                platform.platform.position.x -= 5
+                scrollLength+=5;
+                platforms.forEach((platform) => {
+    
+                    platform.platform.position.x -= 5
+                })
+                
             }
             else if(keys.left.pressed){
-                platform.platform.position.x += 5}
+                scrollLength-=5;
+                platforms.forEach((platform) => {            
+                platform.platform.position.x += 5
+                
+                    
+            })
+            }
         }
+        platforms.forEach((platform) => {
         if(player.position.y + player.height <= platform.platform.position.y 
             && player.position.y +player.height+player.velocity.y >= platform.platform.position.y
             && player.position.x + player.width >= platform.platform.position.x
@@ -69,47 +90,43 @@ const [player, setPlayer] = useState({
             ){
             player.velocity.y = 0;
         }
+    })
 
-
+    if(scrollLength > 2000){
+    
+        console.log("Winner!")
+    }
     }
 
  animate();
 
- window.addEventListener('keydown', ({keyCode}) => {
-    switch(keyCode) {
-        case 65:
-            console.log("THis is left");
+ window.addEventListener('keydown', (event) => {
+    switch(event.code) {
+        case 'KeyA':
             keys.left.pressed = true
             break;
-        case 83:
-            console.log("THis is down");
+        case 'KeyS': 
             break;
-        case 68:
-            console.log("THis is right");
+        case 'KeyD':
             keys.right.pressed = true
             break;
-        case 87:
-            console.log("THis is up");
+        case 'KeyW':
             player.velocity.y -= 20;
             break;                 
     }
  })
 
- window.addEventListener('keyup', ({keyCode}) => {
-    switch(keyCode) {
-        case 65:
-            console.log("THis is left");
+ window.addEventListener('keyup', (event) => {
+    switch(event.code) {
+        case 'KeyA':
             keys.left.pressed = false
             break;
-        case 83:
-            console.log("THis is down");
+        case 'KeyS':
             break;
-        case 68:
-            console.log("THis is right");
+        case 'KeyD':
             keys.right.pressed = false
             break;
-        case 87:
-            console.log("THis is up");
+        case 'KeyW':
             player.velocity.y -= 20;
             break;                 
     }

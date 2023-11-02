@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react"
 
-const Platform = ({canvasContext}) => {
 
+const Platform = ({canvasContext},x,y, image) => {
+    
     const [platform, setPlatform] = useState(
     {
         position: {
-            x: 200,
-            y: 100
+            x,
+            y
         },
-        width: 200,
-        height: 20
+        width: 400,
+        height: 100,
+
+        
     })
+    const img = new Image();
+    img.src = image;
 
     const drawPlatform = () => {
-    canvasContext.context.fillStyle = 'blue'    
-    canvasContext.context.fillRect(platform.position.x, platform.position.y, platform.width, platform.height);
+    canvasContext.context.drawImage(img, platform.position.x, platform.position.y, platform.width, platform.height);
     }
 
 
