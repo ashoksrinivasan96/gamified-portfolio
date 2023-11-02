@@ -2,9 +2,7 @@ import { useState, useEffect } from "react"
 
 
 const Platform = ({canvasContext},x,y, image) => {
-    
-    const [platform, setPlatform] = useState(
-    {
+    const initState =  {
         position: {
             x,
             y
@@ -13,7 +11,8 @@ const Platform = ({canvasContext},x,y, image) => {
         height: 100,
 
         
-    })
+    }
+    const [platform, setPlatform] = useState(initState)
     const img = new Image();
     img.src = image;
 
@@ -21,8 +20,13 @@ const Platform = ({canvasContext},x,y, image) => {
     canvasContext.context.drawImage(img, platform.position.x, platform.position.y, platform.width, platform.height);
     }
 
+    const resetPlatform = () => {
 
-   return {drawPlatform, platform, setPlatform} 
+        setPlatform(initState);
+    }
+
+
+   return {drawPlatform, platform, setPlatform, resetPlatform} 
 }
 
 export default Platform;

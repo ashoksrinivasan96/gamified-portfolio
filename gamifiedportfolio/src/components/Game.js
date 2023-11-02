@@ -4,34 +4,44 @@ import Scenery from "./Scenery";
 import backgroundImg from '../assets/background.png'
 import platformImg from '../assets/platform.png'
 import backgroundImgLight from '../assets/Backgroundlight.png'
+import { useEffect, useState } from "react";
+
 
 const Game = ({canvasContext}) => {
     const gravity = 1.5;
     
-    const backgroundScenery = [Scenery({canvasContext}, 0,0, backgroundImg),
-        Scenery({canvasContext}, 1792,0, backgroundImg),
-        Scenery({canvasContext}, 3584,0, backgroundImg),
-        Scenery({canvasContext}, 5376 -200,0, backgroundImgLight)
-    ]
-    
-    const platforms = [Platform({canvasContext}, 200, 950, platformImg),
-        Platform({canvasContext}, 800,950, platformImg)
-    ]
-    const player = Player({canvasContext}, gravity)  
-    
-    let scrollLength = 0;
-    
-    const keys = {
-        right: {
-            pressed: false
-        },
-        left: {
-            pressed: false
-        }
+   // Define initial state values for your game elements
+   let backgroundScenery = [Scenery({canvasContext}, 0,0, backgroundImg),
+    Scenery({canvasContext}, 1792,0, backgroundImg),
+    Scenery({canvasContext}, 3584,0, backgroundImg),
+    Scenery({canvasContext}, 5376 -200,0, backgroundImgLight)
+]
+
+let platforms = [Platform({canvasContext}, 100, 950, platformImg),
+    Platform({canvasContext}, 700,950, platformImg)
+]
+let player = Player({canvasContext}, gravity)  
+
+let scrollLength = 0;
+
+const keys = {
+    right: {
+        pressed: false
+    },
+    left: {
+        pressed: false
     }
+}
+
+  const restartGame = () => {
+    
+    window.location.reload();
+    
+  };
+let animationFrameId;
 
     const animate = () => {
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
         canvasContext.context.clearRect(0,0,canvasContext.canvas.width,canvasContext.canvas.height);
         
         backgroundScenery.forEach((scenery) =>{
@@ -42,32 +52,32 @@ const Game = ({canvasContext}) => {
         })
         player.updatePlayer();
         if(keys.right.pressed && player.player.position.x < 400){
-            player.player.velocity.x = 5;
+            player.player.velocity.x = 12;
             scrollLength+=5;
         }
         else if(keys.left.pressed && player.player.position.x > 100){
-            player.player.velocity.x = -5;
+            player.player.velocity.x = -12;
             scrollLength-= 5;
         } else {
             player.player.velocity.x = 0;
             if(keys.right.pressed){
                 scrollLength+=5;
                 backgroundScenery.forEach((scenery) =>{
-                    scenery.scenery.position.x -= 3
+                    scenery.scenery.position.x -= 5
                 })
                 platforms.forEach((platform) => {
     
-                    platform.platform.position.x -= 5
+                    platform.platform.position.x -= 10
                 })
                 
             }
             else if(keys.left.pressed){
                 scrollLength-=5;
                 backgroundScenery.forEach((scenery) =>{
-                    scenery.scenery.position.x += 3
+                    scenery.scenery.position.x += 5
                 })
                 platforms.forEach((platform) => {            
-                platform.platform.position.x += 5
+                platform.platform.position.x += 10
                 
                     
             })
@@ -82,14 +92,25 @@ const Game = ({canvasContext}) => {
             player.player.velocity.y = 0;
         }
     })
-
-    if(scrollLength > 2000){
+    // win condition
+    if(scrollLength > 5000){
     
         console.log("Winner!")
     }
-    }
 
- animate();
+   //lose condition
+    if(player.player.position.y > canvasContext.canvas.height) {
+        stopAnimation();
+        restartGame();
+    }
+}
+
+const stopAnimation = () => {
+    cancelAnimationFrame(animationFrameId);
+  };
+   
+animate();
+
 
  window.addEventListener('keydown', (event) => {
     switch(event.code) {
@@ -102,7 +123,9 @@ const Game = ({canvasContext}) => {
             keys.right.pressed = true
             break;
         case 'KeyW':
-            player.player.velocity.y -= 20;
+            if(player.player.position.y > canvasContext.canvas.height/2 +300)
+            {player.player.velocity.y -= 20;
+            }else player.player.velocity.y = 0;
             break;                 
     }
  })
@@ -118,7 +141,6 @@ const Game = ({canvasContext}) => {
             keys.right.pressed = false
             break;
         case 'KeyW':
-            player.player.velocity.y -= 20;
             break;                 
     }
  })
