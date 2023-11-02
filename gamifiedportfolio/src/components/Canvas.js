@@ -1,11 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Player from './Player';
 
+
 const Canvas = () => {
     // Create a ref to the canvas element
     const [canvasContext, setCanvasContext] = useState(null);
     const [isPageLoaded, setPageLoaded] = useState(false);
-
+   
     const canvasRef = useRef(null);
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -20,16 +21,12 @@ const Canvas = () => {
         }
       },[canvasRef]);
   
-   
+    
+
     return(
     <>
     <canvas ref={canvasRef}></canvas>
-    
-    {
-        isPageLoaded?<Player canvasContext = {canvasContext} />:<></>
-        
-    }
-    
+       {isPageLoaded && <Player canvasContext={canvasContext} />}
     </>
     
     )

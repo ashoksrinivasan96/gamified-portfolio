@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
+import Platform from "./Platform";
 
 const Player = ({canvasContext}) => {
+const platform = Platform({canvasContext})    
 const gravity = 1.5;
 const keys = {
     right: {
@@ -45,14 +47,28 @@ const [player, setPlayer] = useState({
         requestAnimationFrame(animate);
         canvasContext.context.clearRect(0,0,canvasContext.canvas.width,canvasContext.canvas.height);
         update();
-
-        if(keys.right.pressed){
+        platform.drawPlatform();
+        if(keys.right.pressed && player.position.x < 400){
             player.velocity.x = 5;
         }
-        else if(keys.left.pressed){
+        else if(keys.left.pressed && player.position.x > 100){
             player.velocity.x = -5;
         }
-        else player.velocity.x = 0;
+        else {
+            player.velocity.x = 0;
+            if(keys.right.pressed){
+                platform.platform.position.x -= 5
+            }
+            else if(keys.left.pressed){
+                platform.platform.position.x += 5}
+        }
+        if(player.position.y + player.height <= platform.platform.position.y 
+            && player.position.y +player.height+player.velocity.y >= platform.platform.position.y
+            && player.position.x + player.width >= platform.platform.position.x
+            && player.position.x <= platform.platform.position.x + platform.platform.width
+            ){
+            player.velocity.y = 0;
+        }
 
 
     }
