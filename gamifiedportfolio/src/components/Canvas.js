@@ -3,7 +3,7 @@ import Player from './Player';
 
 const Canvas = () => {
     // Create a ref to the canvas element
-    const [context, setContext] = useState(null);
+    const [canvasContext, setCanvasContext] = useState(null);
     const [isPageLoaded, setPageLoaded] = useState(false);
 
     const canvasRef = useRef(null);
@@ -15,7 +15,7 @@ const Canvas = () => {
           let c = canvas.getContext('2d');
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight; 
-          setContext(c);
+          setCanvasContext({context:c,canvas:canvas});
           setPageLoaded(true);
         }
       },[canvasRef]);
@@ -26,7 +26,9 @@ const Canvas = () => {
     <canvas ref={canvasRef}></canvas>
     
     {
-        isPageLoaded?<Player context = {context} />:<></>}
+        isPageLoaded?<Player canvasContext = {canvasContext} />:<></>
+        
+    }
     
     </>
     
