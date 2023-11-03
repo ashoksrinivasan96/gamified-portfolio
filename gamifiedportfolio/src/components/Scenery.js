@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react"
 
 
-const Scenery = ({canvasContext},x,y, image) => {
+const Scenery = ({canvasContext},{...data}) => {
     const initState =  {
         position: {
-            x,
-            y
+            x: data.x,
+            y: data.y
         },
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: data.width?data.width:window.innerWidth,
+        height: data.height?data.height:window.innerHeight,
 
         
     }
     const [scenery, setScenery] = useState(initState)
     const img = new Image();
-    img.src = image;
+    img.src = data.img;
 
     const drawScenery = () => {
     canvasContext.context.drawImage(img, scenery.position.x, scenery.position.y, scenery.width, scenery.height);

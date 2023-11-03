@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react"
 
 
-const Platform = ({canvasContext},x,y, image) => {
+const Platform = ({canvasContext},{...data}) => {
+    
     const initState =  {
         position: {
-            x,
-            y
+            x: data.x,
+            y: data.y
         },
-        width: 400,
-        height: 100,
+        width: data.width?data.width:400,
+        height: data.height?data.height:100,
+        collision: (data.collision)?(data.collision):true
 
         
     }
+    
     const [platform, setPlatform] = useState(initState)
+    console.log(platform.collision);
     const img = new Image();
-    img.src = image;
+    img.src = data.img;
 
     const drawPlatform = () => {
     canvasContext.context.drawImage(img, platform.position.x, platform.position.y, platform.width, platform.height);

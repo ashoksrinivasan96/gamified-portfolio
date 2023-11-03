@@ -2,51 +2,34 @@ import Platform from "./Platform";
 import Player from "./Player";
 import Scenery from "./Scenery";
 import backgroundImg from '../assets/background.png'
-import platformImg from '../assets/platform.png'
+
 import backgroundImgLight from '../assets/Backgroundlight.png'
 import { useEffect, useState } from "react";
+
+import { getPlatformConfig, getBackgroundConfig } from '../constants/constants';
+
 
 
 const Game = ({canvasContext}) => {
     const gravity = 1.5;
-    
-   // Define initial state values for your game elements
-   let backgroundScenery = [Scenery({canvasContext}, 0,0, backgroundImg),
-    Scenery({canvasContext}, 1792,0, backgroundImg),
-    Scenery({canvasContext}, 3584,0, backgroundImg),
-    Scenery({canvasContext}, 5376 -50,0, backgroundImgLight)
-]
+    const PLATFORMS = getPlatformConfig(canvasContext)
+    const SCENERY = getBackgroundConfig(canvasContext);
+let platforms = [];
+for(let i=0; i<PLATFORMS.length;i++){
+    platforms[i] = Platform({ canvasContext}, PLATFORMS[i]);
+} 
+let backgroundScenery = [];
 
-
-let platforms = [
-    Platform({ canvasContext }, 100, canvasContext.canvas.height - 75, platformImg),
-    Platform({ canvasContext }, 700, canvasContext.canvas.height - 150, platformImg),
-    Platform({ canvasContext }, 1300, canvasContext.canvas.height - 225, platformImg),
-    Platform({ canvasContext }, 1900, canvasContext.canvas.height - 300, platformImg),
-    Platform({ canvasContext }, 2500, canvasContext.canvas.height - 375, platformImg),
-    Platform({ canvasContext }, 3100, canvasContext.canvas.height - 450, platformImg),
-    Platform({ canvasContext }, 3700, canvasContext.canvas.height - 525, platformImg),
-    Platform({ canvasContext }, 4300, canvasContext.canvas.height - 600, platformImg),
-    Platform({ canvasContext }, 4900, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 5500, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 5900, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 6300, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 6700, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 7100, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 7500, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 7900, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 8300, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 8700, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 9100, canvasContext.canvas.height - 675, platformImg),
-    Platform({ canvasContext }, 9500, canvasContext.canvas.height - 675, platformImg)
-
-];
-
+ for(let i=0; i<SCENERY.length;i++){
+    backgroundScenery[i] = Scenery({canvasContext}, SCENERY[i]);
+ }  
 
 
 let player = Player({canvasContext}, gravity)  
 
 let scrollLength = 0;
+
+let gameOver = false;
 
 const keys = {
     right: {
@@ -75,27 +58,46 @@ let animationFrameId;
             platform.drawPlatform();
         })
         player.updatePlayer();
-        if(keys.right.pressed && player.player.position.x < 400){
+
+        // if d is pressed on the keyboard and player's current x position is less than 400, allow to move the player
+        if(
+        (keys.right.pressed && player.player.position.x < 400) ||
+        (keys.right.pressed && scrollLength >= 10750 && player.player.position.x <canvasContext.canvas.width - 50)
+        )
+            {
             player.player.velocity.x = player.player.speed;
-            scrollLength+=5;
-        }
-        else if(keys.left.pressed && player.player.position.x > 100){
+            if(!gameOver) {
+                scrollLength+=5;
+            }
+            }
+        else if(
+        (keys.left.pressed && player.player.position.x > 100) ||
+        (keys.left.pressed && scrollLength === 0 && player.player.position.x > 0) ||
+        (keys.left.pressed && gameOver && player.player.position.x > 0)
+         ){
             player.player.velocity.x = -player.player.speed;
-            scrollLength-= player.player.speed;
-        } else {
+            if(!gameOver){
+                scrollLength-= player.player.speed
+            }
+          }
+        
+        else {
             player.player.velocity.x = 0;
-            if(keys.right.pressed){
+            if(keys.right.pressed && scrollLength <=10750){
+                if(!gameOver) {
                 scrollLength+=player.player.speed;
-                backgroundScenery.forEach((scenery) =>{
+                backgroundScenery.forEach((scenery) => {
                     scenery.scenery.position.x -= player.player.speed*0.50;
                 })
                 platforms.forEach((platform) => {
     
                     platform.platform.position.x -= player.player.speed*.75;
                 })
+            }
                 
             }
-            else if(keys.left.pressed){
+            else if(keys.left.pressed && scrollLength >0){
+                if(!gameOver){
                 scrollLength-=player.player.speed;
                 backgroundScenery.forEach((scenery) =>{
                     scenery.scenery.position.x += player.player.speed*0.50;
@@ -107,19 +109,22 @@ let animationFrameId;
             })
             }
         }
+        }
+        //collision detection logic
         platforms.forEach((platform) => {
         if(player.player.position.y + player.player.height <= platform.platform.position.y 
             && player.player.position.y +player.player.height+player.player.velocity.y >= platform.platform.position.y
             && player.player.position.x + player.player.width >= platform.platform.position.x
             && player.player.position.x <= platform.platform.position.x + platform.platform.width
+            && platform.platform.collision
             ){
+              
             player.player.velocity.y = 0;
         }
     })
     // win condition
-    if(scrollLength > 9500){
-        console.log(scrollLength);
-        console.log("Winner!")
+    if(scrollLength >= 10750){
+        gameOver = true;
     }
 
    //lose condition
