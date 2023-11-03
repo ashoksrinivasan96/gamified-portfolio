@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 
 const Player = ({canvasContext}, gravity) => {
     const initState = {
+        speed: 15,
         position:{
             x: 100,
             y: 100
@@ -17,10 +18,6 @@ const Player = ({canvasContext}, gravity) => {
     }
 const [player, setPlayer] = useState(initState)
 
-const resetPlayer = () => {
-    
-    setPlayer(initState);
-}
    
     const drawPlayer = () => {
        canvasContext.context.fillStyle = 'red'; 
@@ -39,7 +36,7 @@ const resetPlayer = () => {
         
     }
 
-return {drawPlayer, player, updatePlayer, resetPlayer}
+return {drawPlayer, player, updatePlayer}
 }
 
 export default Player;

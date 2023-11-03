@@ -20,13 +20,8 @@ const Platform = ({canvasContext},x,y, image) => {
     canvasContext.context.drawImage(img, platform.position.x, platform.position.y, platform.width, platform.height);
     }
 
-    const resetPlatform = () => {
 
-        setPlatform(initState);
-    }
-
-
-   return {drawPlatform, platform, setPlatform, resetPlatform} 
+   return {drawPlatform, platform} 
 }
 
 export default Platform;

@@ -14,12 +14,36 @@ const Game = ({canvasContext}) => {
    let backgroundScenery = [Scenery({canvasContext}, 0,0, backgroundImg),
     Scenery({canvasContext}, 1792,0, backgroundImg),
     Scenery({canvasContext}, 3584,0, backgroundImg),
-    Scenery({canvasContext}, 5376 -200,0, backgroundImgLight)
+    Scenery({canvasContext}, 5376 -50,0, backgroundImgLight)
 ]
 
-let platforms = [Platform({canvasContext}, 100, 950, platformImg),
-    Platform({canvasContext}, 700,950, platformImg)
-]
+
+let platforms = [
+    Platform({ canvasContext }, 100, canvasContext.canvas.height - 75, platformImg),
+    Platform({ canvasContext }, 700, canvasContext.canvas.height - 150, platformImg),
+    Platform({ canvasContext }, 1300, canvasContext.canvas.height - 225, platformImg),
+    Platform({ canvasContext }, 1900, canvasContext.canvas.height - 300, platformImg),
+    Platform({ canvasContext }, 2500, canvasContext.canvas.height - 375, platformImg),
+    Platform({ canvasContext }, 3100, canvasContext.canvas.height - 450, platformImg),
+    Platform({ canvasContext }, 3700, canvasContext.canvas.height - 525, platformImg),
+    Platform({ canvasContext }, 4300, canvasContext.canvas.height - 600, platformImg),
+    Platform({ canvasContext }, 4900, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 5500, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 5900, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 6300, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 6700, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 7100, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 7500, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 7900, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 8300, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 8700, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 9100, canvasContext.canvas.height - 675, platformImg),
+    Platform({ canvasContext }, 9500, canvasContext.canvas.height - 675, platformImg)
+
+];
+
+
+
 let player = Player({canvasContext}, gravity)  
 
 let scrollLength = 0;
@@ -52,32 +76,32 @@ let animationFrameId;
         })
         player.updatePlayer();
         if(keys.right.pressed && player.player.position.x < 400){
-            player.player.velocity.x = 12;
+            player.player.velocity.x = player.player.speed;
             scrollLength+=5;
         }
         else if(keys.left.pressed && player.player.position.x > 100){
-            player.player.velocity.x = -12;
-            scrollLength-= 5;
+            player.player.velocity.x = -player.player.speed;
+            scrollLength-= player.player.speed;
         } else {
             player.player.velocity.x = 0;
             if(keys.right.pressed){
-                scrollLength+=5;
+                scrollLength+=player.player.speed;
                 backgroundScenery.forEach((scenery) =>{
-                    scenery.scenery.position.x -= 5
+                    scenery.scenery.position.x -= player.player.speed*0.50;
                 })
                 platforms.forEach((platform) => {
     
-                    platform.platform.position.x -= 10
+                    platform.platform.position.x -= player.player.speed*.75;
                 })
                 
             }
             else if(keys.left.pressed){
-                scrollLength-=5;
+                scrollLength-=player.player.speed;
                 backgroundScenery.forEach((scenery) =>{
-                    scenery.scenery.position.x += 5
+                    scenery.scenery.position.x += player.player.speed*0.50;
                 })
                 platforms.forEach((platform) => {            
-                platform.platform.position.x += 10
+                platform.platform.position.x += player.player.speed*.75;
                 
                     
             })
@@ -93,8 +117,8 @@ let animationFrameId;
         }
     })
     // win condition
-    if(scrollLength > 5000){
-    
+    if(scrollLength > 9500){
+        console.log(scrollLength);
         console.log("Winner!")
     }
 
@@ -123,9 +147,9 @@ animate();
             keys.right.pressed = true
             break;
         case 'KeyW':
-            if(player.player.position.y > canvasContext.canvas.height/2 +300)
-            {player.player.velocity.y -= 20;
-            }else player.player.velocity.y = 0;
+
+            player.player.velocity.y -= 25;
+            
             break;                 
     }
  })

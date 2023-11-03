@@ -20,12 +20,8 @@ const Scenery = ({canvasContext},x,y, image) => {
     canvasContext.context.drawImage(img, scenery.position.x, scenery.position.y, scenery.width, scenery.height);
     }
 
-    const resetScenery = () => {
-        setScenery(initState);
-    }
 
-
-   return {drawScenery, scenery, setScenery, resetScenery} 
+   return {drawScenery, scenery} 
 }
 
 export default Scenery;
