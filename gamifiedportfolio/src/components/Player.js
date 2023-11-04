@@ -1,4 +1,8 @@
-import { useState, useEffect } from "react"
+import samuraiIdleLeft from '../assets/Samurai/IdleLeft.png'
+import samuraiIdleRight from '../assets/Samurai/IdleRight.png'
+import samuraiRunRight from '../assets/Samurai/RunRight.png'
+import samuraiRunLeft from '../assets/Samurai/RunLeft.png'
+
 
 
 const Player = ({canvasContext}, {...data}) => {
@@ -15,23 +19,36 @@ const Player = ({canvasContext}, {...data}) => {
             y: 1
         },
         frames: 1,
-        animation: {
+        action: {
             stand: {
-                left:"",
-                right:""
+                left:data.action.stand.left,
+                right:data.action.stand.right
             },
             run: {
-                left:"",
-                right:""
+                left:data.action.run.left,
+                right:data.action.run.right
             }
         }
     }
 
-const img = new Image();
-img.src = data.image;
+const createImage = () => {
+    const img = new Image();
+    if(player.action.stand.left){
+        img.src = samuraiIdleLeft;
+    } else if(player.action.stand.right){
+        img.src = samuraiIdleRight;
+    } else if(player.action.run.left){
+        img.src = samuraiRunLeft;
+    } else if(player.action.run.right){
+        img.src = samuraiRunRight; 
+    } 
+    return img; 
+}
+
+
    
     const drawPlayer = () => {
-       canvasContext.context.drawImage(img,player.frames*128,0,128,128 ,player.position.x, player.position.y, player.width, player.height);
+       canvasContext.context.drawImage(createImage(),player.frames*128,0,128,128 ,player.position.x, player.position.y, player.width, player.height);
     }
 
     const updatePlayer = () => {

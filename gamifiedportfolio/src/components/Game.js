@@ -2,8 +2,7 @@ import Platform from "./Platform";
 import Player from "./Player";
 import Scenery from "./Scenery";
 import { getPlatformConfig, getBackgroundConfig } from '../constants/constants';
-//import samuraiIdleLeft from '../assets/Samurai/IdleLeft.png'
-import samuraiIdleRight from '../assets/Samurai/IdleRight.png';
+
 
 
 const Game = ({canvasContext}) => {
@@ -34,7 +33,7 @@ const keys = {
     }
 }
 //logic for animation
-let player = Player({canvasContext}, {gravity:gravity, image:samuraiIdleRight})
+let player = Player({canvasContext}, {gravity:gravity, action:{stand:{right:true, left:false}, run:{right:false,left:false}}})
 
 
 
@@ -140,39 +139,59 @@ const stopAnimation = () => {
    
 animate();
 
-
- window.addEventListener('keydown', (event) => {
-    switch(event.code) {
-        case 'KeyA':
-            keys.left.pressed = true
-            break;
-        case 'KeyS': 
-            break;
-        case 'KeyD':
-            keys.right.pressed = true
-            break;
+//Key press logic
+window.addEventListener('keydown', (event) => {
+    switch (event.code) {
         case 'KeyW':
-
             player.player.velocity.y -= 25;
-            
-            break;                 
-    }
- })
-
- window.addEventListener('keyup', (event) => {
-    switch(event.code) {
+            break; 
         case 'KeyA':
-            keys.left.pressed = false
+            keys.left.pressed = true;
+            player.player.action.stand.left = false;
+            player.player.action.stand.right = false;
+            player.player.action.run.left = true;
+            player.player.action.run.right = false;
             break;
         case 'KeyS':
-            break;
+                break;      
         case 'KeyD':
-            keys.right.pressed = false
+            keys.right.pressed = true;
+            player.player.action.stand.left = false;
+            player.player.action.stand.right = false;
+            player.player.action.run.left = false;
+            player.player.action.run.right = true;
             break;
-        case 'KeyW':
-            break;                 
+        // Other key event handling
     }
- })
+});
+
+window.addEventListener('keyup', (event) => {
+    switch (event.code) {
+        case 'KeyW':
+            case 'KeyW':
+    
+            break;
+        case 'KeyA':
+            keys.left.pressed = false;
+            player.player.action.run.left = false;
+            if (!keys.right.pressed) {
+                player.player.action.stand.left = true;
+            }
+            break;
+        case 'KeyS':
+            break;    
+        case 'KeyD':
+            keys.right.pressed = false;
+            player.player.action.run.right = false;
+            if (!keys.left.pressed) {
+                player.player.action.stand.right = true;
+            }
+            break;
+        // Other key event handling
+    }
+});
+
+
 }
 
 export default Game;
