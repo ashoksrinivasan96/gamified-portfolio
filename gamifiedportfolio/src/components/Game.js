@@ -32,10 +32,27 @@ const keys = {
         pressed: false
     }
 }
+let initialActions = {
+    stand:
+    {
+        right:true,
+        left:false}
+        ,
+     run:
+    {
+        right:false,
+        left:false
+    },
+    jump:
+    {
+        right:false,
+        left:false
+    }
+} 
 //logic for animation
-let player = Player({canvasContext}, {gravity:gravity, action:{stand:{right:true, left:false}, run:{right:false,left:false}}})
+let player = Player({canvasContext}, {gravity:gravity, action:initialActions})
 
-
+let isPlayerInAir = false;
 
   const restartGame = () => {
     
@@ -46,7 +63,6 @@ let animationFrameId;
 
     const animate = () => {
         animationFrameId = requestAnimationFrame(animate);
-        canvasContext.context.clearRect(0,0,canvasContext.canvas.width,canvasContext.canvas.height);
         
         backgroundScenery.forEach((scenery) =>{
             scenery.drawScenery();
@@ -115,10 +131,11 @@ let animationFrameId;
             && player.player.position.y +player.player.height+player.player.velocity.y >= platform.platform.position.y
             && player.player.position.x + player.player.width >= platform.platform.position.x
             && player.player.position.x <= platform.platform.position.x + platform.platform.width
-            && platform.platform.collision
             ){
               
             player.player.velocity.y = 0;
+            isPlayerInAir = false
+
         }
     })
     // win condition
@@ -144,7 +161,19 @@ window.addEventListener('keydown', (event) => {
     switch (event.code) {
         case 'KeyW':
             player.player.velocity.y -= 25;
-            break; 
+            player.player.action.stand.left = false;
+            player.player.action.stand.right = false;
+            player.player.action.run.left = false;
+            player.player.action.run.right = false;
+
+            // Check the current direction and set the jump animation
+            if (keys.left.pressed) {
+                player.player.action.jump.left = true;
+            } else if (keys.right.pressed) {
+                player.player.action.jump.right = true;
+            }
+            
+            break;
         case 'KeyA':
             keys.left.pressed = true;
             player.player.action.stand.left = false;
@@ -168,8 +197,17 @@ window.addEventListener('keydown', (event) => {
 window.addEventListener('keyup', (event) => {
     switch (event.code) {
         case 'KeyW':
-            case 'KeyW':
-    
+            setTimeout(() => {
+                player.player.action.jump.right = false;
+                player.player.action.jump.left = false;
+
+                if (keys.right.pressed) {
+                    player.player.action.run.right = true;
+                } else {
+                    player.player.action.stand.right = true;
+                }
+            }, 400); 
+        
             break;
         case 'KeyA':
             keys.left.pressed = false;
