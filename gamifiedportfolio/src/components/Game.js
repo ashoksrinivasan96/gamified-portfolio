@@ -1,19 +1,15 @@
 import Platform from "./Platform";
 import Player from "./Player";
 import Scenery from "./Scenery";
-import backgroundImg from '../assets/background.png'
-
-import backgroundImgLight from '../assets/Backgroundlight.png'
-import { useEffect, useState } from "react";
-
 import { getPlatformConfig, getBackgroundConfig } from '../constants/constants';
-
+//import samuraiIdleLeft from '../assets/Samurai/IdleLeft.png'
+import samuraiIdleRight from '../assets/Samurai/IdleRight.png';
 
 
 const Game = ({canvasContext}) => {
     const gravity = 1.5;
     const PLATFORMS = getPlatformConfig(canvasContext)
-    const SCENERY = getBackgroundConfig(canvasContext);
+    const SCENERY = getBackgroundConfig(canvasContext);    
 let platforms = [];
 for(let i=0; i<PLATFORMS.length;i++){
     platforms[i] = Platform({ canvasContext}, PLATFORMS[i]);
@@ -24,8 +20,6 @@ let backgroundScenery = [];
     backgroundScenery[i] = Scenery({canvasContext}, SCENERY[i]);
  }  
 
-
-let player = Player({canvasContext}, gravity)  
 
 let scrollLength = 0;
 
@@ -39,6 +33,10 @@ const keys = {
         pressed: false
     }
 }
+//logic for animation
+let player = Player({canvasContext}, {gravity:gravity, image:samuraiIdleRight})
+
+
 
   const restartGame = () => {
     
@@ -57,9 +55,11 @@ let animationFrameId;
         platforms.forEach((platform) => {
             platform.drawPlatform();
         })
+        
         player.updatePlayer();
 
-        // if d is pressed on the keyboard and player's current x position is less than 400, allow to move the player
+        
+        // if d is pressed on the keyboard and player's current x position is less than 400, allow to move the player towards right
         if(
         (keys.right.pressed && player.player.position.x < 400) ||
         (keys.right.pressed && scrollLength >= 10750 && player.player.position.x <canvasContext.canvas.width - 50)
@@ -67,7 +67,7 @@ let animationFrameId;
             {
             player.player.velocity.x = player.player.speed;
             if(!gameOver) {
-                scrollLength+=5;
+                scrollLength+=player.player.speed;
             }
             }
         else if(
