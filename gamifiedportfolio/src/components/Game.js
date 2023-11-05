@@ -2,6 +2,7 @@ import Platform from "./Platform";
 import Player from "./Player";
 import Scenery from "./Scenery";
 import { getPlatformConfig, getBackgroundConfig } from '../constants/constants';
+import { useEffect } from "react";
 
 
 
@@ -50,7 +51,7 @@ let initialActions = {
     }
 } 
 //logic for animation
-let player = Player({canvasContext}, {gravity:gravity, action:initialActions})
+let player = Player({canvasContext}, {gravity:gravity, action:initialActions, direction:{forward:true}})
 
 let isPlayerInAir = false;
 
@@ -153,8 +154,14 @@ let animationFrameId;
 const stopAnimation = () => {
     cancelAnimationFrame(animationFrameId);
   };
-   
-animate();
+
+  useEffect(()=>{
+    animate();
+
+    return() => {
+        stopAnimation();
+    };
+  },[])
 
 //Key press logic
 window.addEventListener('keydown', (event) => {
@@ -167,15 +174,13 @@ window.addEventListener('keydown', (event) => {
             player.player.action.run.right = false;
 
             // Check the current direction and set the jump animation
-            if (keys.left.pressed) {
+            if (!player.player.direction.forward) {
                 player.player.action.jump.left = true;
-            } else if (keys.right.pressed) {
-                player.player.action.jump.right = true;
-            }
-            
+            } else player.player.action.jump.right = true;
             break;
         case 'KeyA':
             keys.left.pressed = true;
+            player.player.direction.forward = false;
             player.player.action.stand.left = false;
             player.player.action.stand.right = false;
             player.player.action.run.left = true;
@@ -185,6 +190,7 @@ window.addEventListener('keydown', (event) => {
                 break;      
         case 'KeyD':
             keys.right.pressed = true;
+            player.player.direction.forward = true;
             player.player.action.stand.left = false;
             player.player.action.stand.right = false;
             player.player.action.run.left = false;
@@ -201,12 +207,18 @@ window.addEventListener('keyup', (event) => {
                 player.player.action.jump.right = false;
                 player.player.action.jump.left = false;
 
-                if (keys.right.pressed) {
+                if (player.player.direction.forward && keys.right.pressed) {
                     player.player.action.run.right = true;
-                } else {
+                } else if(player.player.direction.forward) {
                     player.player.action.stand.right = true;
                 }
-            }, 400); 
+                else if(!player.player.direction.forward && keys.left.pressed){
+                    player.player.action.run.left = true;
+                }
+                else if(!player.player.direction.forward){
+                    player.player.action.stand.left = true
+                }
+            }, 500); 
         
             break;
         case 'KeyA':

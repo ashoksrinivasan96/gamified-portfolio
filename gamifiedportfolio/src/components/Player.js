@@ -50,10 +50,15 @@ const Player = ({canvasContext}, {...data}) => {
             jump: {
                 left: data.action.jump.left,
                 right: data.action.jump.right,
-            }
+            },
+        },
+        direction: {
+            forward: data.direction.forward,
+            backward: !data.direction.forward
         }
     }
 
+    console.log("value of backward", player.direction.backward)
     const createImage = () => {
         const img = new Image();
       
