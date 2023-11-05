@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 
 
 const Scenery = ({canvasContext},{...data}) => {
-    const initState =  {
+    const scenery =  {
         position: {
             x: data.x,
             y: data.y
@@ -12,7 +12,6 @@ const Scenery = ({canvasContext},{...data}) => {
 
         
     }
-    const [scenery, setScenery] = useState(initState)
     const img = new Image();
     img.src = data.img;
 

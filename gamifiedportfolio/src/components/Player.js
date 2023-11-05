@@ -29,13 +29,13 @@ const Player = ({canvasContext}, {...data}) => {
             x: 100,
             y: canvasContext.canvas.height - 405
         },
-        width : 256,
-        height : 256,
+        width : 128,
+        height : 128,
         velocity: {
             x: 0,
             y: 1
         },
-        frames: 1,
+        frames: 0,
         totalFrames:6,
         action: {
             stand: {
@@ -59,6 +59,10 @@ const Player = ({canvasContext}, {...data}) => {
         }
     }
 
+    
+
+
+
     const createImage = () => {
         const img = new Image();
       
@@ -81,7 +85,7 @@ const Player = ({canvasContext}, {...data}) => {
           img.src = images.samuraiJumpRight.src;
           player.totalFrames = 12;
         }
-      
+
         return img;
       };
    
@@ -91,7 +95,7 @@ const Player = ({canvasContext}, {...data}) => {
 
     const updatePlayer = () => {
         player.frames++;
-        if(player.frames>= player.totalFrames) player.frames = 0;
+        if(player.frames >= player.totalFrames) player.frames = 0;
         drawPlayer();
         player.position.y+=player.velocity.y;
         player.position.x+=player.velocity.x;

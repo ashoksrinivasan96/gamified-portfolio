@@ -9,10 +9,8 @@ const Platform = ({canvasContext},{...data}) => {
             y: data.y
         },
         width: data.width?data.width:400,
-        height: data.height?data.height:100,
-        collision: (data.collision)?(data.collision):true
-
-        
+        height: data.height?data.height:100
+   
     }
 
     const img = new Image();

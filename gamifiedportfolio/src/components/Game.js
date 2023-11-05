@@ -1,7 +1,7 @@
 import Platform from "./Platform";
 import Player from "./Player";
 import Scenery from "./Scenery";
-import { getPlatformConfig, getBackgroundConfig } from '../constants/constants';
+import { getPlatformConfig, getBackgroundConfig } from '../constants/config';
 import { useEffect } from "react";
 
 
@@ -76,6 +76,7 @@ let animationFrameId;
         })
         platforms.forEach((platform) => {
             platform.drawPlatform();
+            console.log(platform.platform.collision)
         })
         
         player.updatePlayer();
@@ -105,7 +106,7 @@ let animationFrameId;
         
         else {
             player.player.velocity.x = 0;
-            if(keys.right.pressed && scrollLength <=10750){
+            if(keys.right.pressed && scrollLength <=10850){
                 if(!gameOver) {
                 scrollLength+=player.player.speed;
                 backgroundScenery.forEach((scenery) => {
@@ -138,7 +139,7 @@ let animationFrameId;
             && player.player.position.y +player.player.height+player.player.velocity.y >= platform.platform.position.y
             && player.player.position.x + player.player.width >= platform.platform.position.x
             && player.player.position.x <= platform.platform.position.x + platform.platform.width
-            ){
+        ){
               
             player.player.velocity.y = 0;
 
