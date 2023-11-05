@@ -50,6 +50,7 @@ const Player = ({canvasContext}, {...data}) => {
             jump: {
                 left: data.action.jump.left,
                 right: data.action.jump.right,
+                count: 0
             },
         },
         direction: {
@@ -58,7 +59,6 @@ const Player = ({canvasContext}, {...data}) => {
         }
     }
 
-    console.log("value of backward", player.direction.backward)
     const createImage = () => {
         const img = new Image();
       
@@ -95,6 +95,9 @@ const Player = ({canvasContext}, {...data}) => {
         drawPlayer();
         player.position.y+=player.velocity.y;
         player.position.x+=player.velocity.x;
+        if(player.velocity.y ===0 && player.action.jump.count>1) {
+            player.action.jump.count = 0
+        }
         if(player.position.y + player.height + player.velocity.y <=canvasContext.canvas.height){
             player.velocity.y+=data.gravity;
         }

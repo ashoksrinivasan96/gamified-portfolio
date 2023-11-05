@@ -31,6 +31,9 @@ const keys = {
     },
     left: {
         pressed: false
+    },
+    up: {
+        pressed: false
     }
 }
 let initialActions = {
@@ -53,7 +56,10 @@ let initialActions = {
 //logic for animation
 let player = Player({canvasContext}, {gravity:gravity, action:initialActions, direction:{forward:true}})
 
-let isPlayerInAir = false;
+
+useEffect(()=> { 
+
+}, [player.player.action.jump.count])
 
   const restartGame = () => {
     
@@ -135,7 +141,6 @@ let animationFrameId;
             ){
               
             player.player.velocity.y = 0;
-            isPlayerInAir = false
 
         }
     })
@@ -167,16 +172,22 @@ const stopAnimation = () => {
 window.addEventListener('keydown', (event) => {
     switch (event.code) {
         case 'KeyW':
-            player.player.velocity.y -= 25;
+            if(!keys.up.pressed && player.player.action.jump.count <2){
+            player.player.velocity.y = -25
+            
+            }
             player.player.action.stand.left = false;
             player.player.action.stand.right = false;
             player.player.action.run.left = false;
             player.player.action.run.right = false;
-
+            
             // Check the current direction and set the jump animation
             if (!player.player.direction.forward) {
                 player.player.action.jump.left = true;
             } else player.player.action.jump.right = true;
+            keys.up.pressed = true;
+            player.player.action.jump.count ++;
+            
             break;
         case 'KeyA':
             keys.left.pressed = true;
@@ -203,6 +214,8 @@ window.addEventListener('keydown', (event) => {
 window.addEventListener('keyup', (event) => {
     switch (event.code) {
         case 'KeyW':
+           
+             keys.up.pressed = false;
             setTimeout(() => {
                 player.player.action.jump.right = false;
                 player.player.action.jump.left = false;
