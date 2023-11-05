@@ -4,8 +4,23 @@ import samuraiRunRight from '../assets/Samurai/RunRight.png'
 import samuraiRunLeft from '../assets/Samurai/RunLeft.png'
 import samuraiJumpRight from '../assets/Samurai/JumpRight.png';
 import samuraiJumpLeft from '../assets/Samurai/JumpLeft.png';
+import React, { useEffect, useState } from 'react';
+//preloading images
+const images = {
+  samuraiIdleLeft: new Image(),
+  samuraiIdleRight: new Image(),
+  samuraiRunRight: new Image(),
+  samuraiRunLeft: new Image(),
+  samuraiJumpRight: new Image(),
+  samuraiJumpLeft: new Image(),
+};
 
-
+images.samuraiIdleLeft.src = samuraiIdleLeft;
+images.samuraiIdleRight.src = samuraiIdleRight;
+images.samuraiRunRight.src = samuraiRunRight;
+images.samuraiRunLeft.src = samuraiRunLeft;
+images.samuraiJumpRight.src = samuraiJumpRight;
+images.samuraiJumpLeft.src = samuraiJumpLeft;
 
 const Player = ({canvasContext}, {...data}) => {
     const player = {
@@ -39,41 +54,31 @@ const Player = ({canvasContext}, {...data}) => {
         }
     }
 
-const createImage = () => {
-    const img = new Image();
-    switch (true) {
-        case player.action.stand.left:
-            img.src = samuraiIdleLeft;
-            player.totalFrames = 6;
-            break;
-        case player.action.stand.right:
-            img.src = samuraiIdleRight;
-            player.totalFrames = 6;
-            break;
-        case player.action.run.left:
-            img.src = samuraiRunLeft;
-            player.totalFrames = 8;
-            break;
-        case player.action.run.right:
-            img.src = samuraiRunRight;
-            player.totalFrames = 8;
-            break;
-        case player.action.jump.left:
-            img.src = samuraiJumpLeft;
-            player.totalFrames = 12;
-            break; 
-        case player.action.jump.right:
-            img.src = samuraiJumpRight;
-            player.totalFrames = 12;
-            break;        
-        default:
-            // Handle the default case if none of the conditions are met
-            break;
-    }
-    return img;
-}
-
-
+    const createImage = () => {
+        const img = new Image();
+      
+        if (player.action.stand.left) {
+          img.src = images.samuraiIdleLeft.src;
+          player.totalFrames = 6;
+        } else if (player.action.stand.right) {
+          img.src = images.samuraiIdleRight.src;
+          player.totalFrames = 6;
+        } else if (player.action.run.left) {
+          img.src = images.samuraiRunLeft.src;
+          player.totalFrames = 8;
+        } else if (player.action.run.right) {
+          img.src = images.samuraiRunRight.src;
+          player.totalFrames = 8;
+        } else if (player.action.jump.left) {
+          img.src = images.samuraiJumpLeft.src;
+          player.totalFrames = 12;
+        } else if (player.action.jump.right) {
+          img.src = images.samuraiJumpRight.src;
+          player.totalFrames = 12;
+        }
+      
+        return img;
+      };
    
     const drawPlayer = () => {
        canvasContext.context.drawImage(createImage(),player.frames*128,0,128,128 ,player.position.x, player.position.y, player.width, player.height);

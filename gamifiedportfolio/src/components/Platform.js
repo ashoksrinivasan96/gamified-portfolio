@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 
 const Platform = ({canvasContext},{...data}) => {
     
-    const initState =  {
+    const platform =  {
         position: {
             x: data.x,
             y: data.y
@@ -14,9 +14,7 @@ const Platform = ({canvasContext},{...data}) => {
 
         
     }
-    
-    const [platform, setPlatform] = useState(initState)
-    console.log(platform.collision);
+
     const img = new Image();
     img.src = data.img;
 
