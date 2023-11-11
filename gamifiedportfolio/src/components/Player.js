@@ -99,7 +99,7 @@ const Player = ({canvasContext}, {...data}) => {
         drawPlayer();
         player.position.y+=player.velocity.y;
         player.position.x+=player.velocity.x;
-        if(player.velocity.y ===0 && player.action.jump.count>1) {
+        if(player.velocity.y ===0)  {
             player.action.jump.count = 0
         }
         if(player.position.y + player.height + player.velocity.y <=canvasContext.canvas.height){

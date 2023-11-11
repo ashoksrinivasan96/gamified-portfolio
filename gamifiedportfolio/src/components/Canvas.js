@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import Player from './Player';
 import Game from './Game';
 
 
@@ -17,6 +16,7 @@ const Canvas = () => {
           let c = canvas.getContext('2d');
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight; 
+         
           setCanvasContext({context:c,canvas:canvas});
           setPageLoaded(true);
         }

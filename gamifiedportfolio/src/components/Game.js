@@ -4,26 +4,29 @@ import Scenery from "./Scenery";
 import { getPlatformConfig, getBackgroundConfig } from '../constants/config';
 import { useEffect } from "react";
 
-
-
+//main Game logical component
 const Game = ({canvasContext}) => {
+    //setting base gravity
     const gravity = 1.5;
+    //creating platform and background scenery settings object using config.js file
     const PLATFORMS = getPlatformConfig(canvasContext)
-    const SCENERY = getBackgroundConfig(canvasContext);    
+    const SCENERY = getBackgroundConfig(canvasContext); 
+//creating an empty platforms array and storing the platform object in it 
 let platforms = [];
 for(let i=0; i<PLATFORMS.length;i++){
     platforms[i] = Platform({ canvasContext}, PLATFORMS[i]);
 } 
+//creating an empty scenery array and storing the scenery object in it
 let backgroundScenery = [];
-
  for(let i=0; i<SCENERY.length;i++){
     backgroundScenery[i] = Scenery({canvasContext}, SCENERY[i]);
  }  
 
-
+//setting the amount
 let scrollLength = 0;
+let lockScroll = false;
 
-let gameOver = false;
+let boss = false;
 
 
 const keys = {
@@ -54,27 +57,23 @@ let initialActions = {
         left:false
     }
 } 
-//logic for animation
+
 let player = Player({canvasContext}, {gravity:gravity, action:initialActions, direction:{forward:true}})
 
 
-useEffect(()=> { 
 
-}, [player.player.action.jump.count])
 
   const restartGame = () => {
     
     window.location.reload();
     
   };
-let animationFrameId;
-let lastTimestamp = 0;
-const fps = 100;
 
-    const animate = (timestamp) => {
-        const deltaTime = timestamp - lastTimestamp;
-        if (deltaTime > 1000 / fps) {
-            lastTimestamp = timestamp;
+let animationFrameId;
+
+
+    const animate = () => {
+        
         animationFrameId = requestAnimationFrame(animate);
         
         backgroundScenery.forEach((scenery) =>{
@@ -89,34 +88,47 @@ const fps = 100;
 
         
         // if d is pressed on the keyboard and player's current x position is less than 400, allow to move the player towards right
-        if(
-        (keys.right.pressed && player.player.position.x < 400) ||
-        (keys.right.pressed && scrollLength >= 10750 && player.player.position.x <canvasContext.canvas.width - 50)
+        if((keys.right.pressed && player.player.position.x < 400) ||
+        (keys.right.pressed && lockScroll) ||
+        (keys.right.pressed && boss && scrollLength>200 && player.player.position.x < canvasContext.canvas.width -200)
         )
             {
             player.player.velocity.x = player.player.speed;
-            if(!gameOver) {
-                scrollLength+=player.player.speed;
+            scrollLength+=player.player.speed;
+            
+            if (lockScroll && player.player.position.x > canvasContext.canvas.width - 200) {
+                // Move player back to position x = 100
+                player.player.position.x = 100;
+                lockScroll = false;
+                scrollLength = 0;
+                boss = true;
+                //backgroundScenery[4].scenery.position.x=0;
+                backgroundScenery.forEach((scenery)=>{
+                    scenery.scenery.position.x-=canvasContext.canvas.width;
+                })
+
+                platforms.forEach((platform)=>{
+                    platform.platform.position.x-=canvasContext.canvas.width+50;
+                })
+
             }
-            }
+        }
         else if(
         (keys.left.pressed && player.player.position.x > 100) ||
         (keys.left.pressed && scrollLength === 0 && player.player.position.x > 0) ||
-        (keys.left.pressed && gameOver && player.player.position.x > 0)
-         ){
+        (keys.left.pressed && lockScroll && player.player.position.x > 0) ||
+        (keys.left.pressed && boss && player.player.position.x > 10)){
             player.player.velocity.x = -player.player.speed;
-            if(!gameOver){
-                scrollLength-= player.player.speed
-            }
+            scrollLength-= player.player.speed
           }
         
         else {
             player.player.velocity.x = 0;
-            if(keys.right.pressed && scrollLength <=10850){
-                if(!gameOver) {
+            if(keys.right.pressed && player.player.position.x <canvasContext.canvas.width-200){
+                if(!lockScroll) {
                 scrollLength+=player.player.speed;
                 backgroundScenery.forEach((scenery) => {
-                    scenery.scenery.position.x -= player.player.speed*0.50;
+                    scenery.scenery.position.x -= player.player.speed*0.75;
                 })
                 platforms.forEach((platform) => {
     
@@ -126,10 +138,10 @@ const fps = 100;
                 
             }
             else if(keys.left.pressed && scrollLength >0){
-                if(!gameOver){
+                if(lockScroll || !boss){
                 scrollLength-=player.player.speed;
                 backgroundScenery.forEach((scenery) =>{
-                    scenery.scenery.position.x += player.player.speed*0.50;
+                    scenery.scenery.position.x += player.player.speed*0.75;
                 })
                 platforms.forEach((platform) => {            
                 platform.platform.position.x += player.player.speed*.75;
@@ -153,8 +165,8 @@ const fps = 100;
             }
         });
     // win condition
-    if(scrollLength >= 10750){
-        gameOver = true;
+    if(scrollLength >= 7900 && !boss){
+        lockScroll = true;
     }
 
    //lose condition
@@ -163,9 +175,6 @@ const fps = 100;
         restartGame();
     }
 }
-else animationFrameId = requestAnimationFrame(animate);
-
-    }
 
 const stopAnimation = () => {
     cancelAnimationFrame(animationFrameId);
