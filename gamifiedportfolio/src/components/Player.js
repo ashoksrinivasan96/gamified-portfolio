@@ -29,8 +29,8 @@ const Player = ({canvasContext}, {...data}) => {
             x: 100,
             y: canvasContext.canvas.height - 405
         },
-        width : 64,
-        height : 128,
+        width : 256,
+        height : 256,
         velocity: {
             x: 0,
             y: 1
@@ -68,22 +68,22 @@ const Player = ({canvasContext}, {...data}) => {
       
         if (player.action.stand.left) {
           img.src = images.samuraiIdleLeft.src;
-          player.totalFrames = 6;
+          player.totalFrames = 5;
         } else if (player.action.stand.right) {
           img.src = images.samuraiIdleRight.src;
-          player.totalFrames = 6;
+          player.totalFrames = 5;
         } else if (player.action.run.left) {
           img.src = images.samuraiRunLeft.src;
-          player.totalFrames = 8;
+          player.totalFrames = 7;
         } else if (player.action.run.right) {
           img.src = images.samuraiRunRight.src;
-          player.totalFrames = 8;
+          player.totalFrames = 7;
         } else if (player.action.jump.left) {
           img.src = images.samuraiJumpLeft.src;
-          player.totalFrames = 12;
+          player.totalFrames = 11;
         } else if (player.action.jump.right) {
           img.src = images.samuraiJumpRight.src;
-          player.totalFrames = 12;
+          player.totalFrames = 11;
         }
 
         return img;

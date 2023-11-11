@@ -139,8 +139,8 @@ let animationFrameId;
             if (
                 player.player.position.y + player.player.height <= platform.platform.position.y &&
                 player.player.position.y + player.player.height + player.player.velocity.y >= platform.platform.position.y &&
-                player.player.position.x + player.player.width > platform.platform.position.x &&
-                player.player.position.x < platform.platform.position.x + platform.platform.width
+                player.player.position.x + player.player.width - 100> platform.platform.position.x &&
+                player.player.position.x < platform.platform.position.x + platform.platform.width -100
             ) {
                 // Character is colliding with the platform from above
                 player.player.velocity.y = 0;
