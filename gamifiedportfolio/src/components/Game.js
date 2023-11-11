@@ -69,7 +69,7 @@ useEffect(()=> {
   };
 let animationFrameId;
 let lastTimestamp = 0;
-const fps = 80;
+const fps = 100;
 
     const animate = (timestamp) => {
         const deltaTime = timestamp - lastTimestamp;
@@ -185,7 +185,8 @@ window.addEventListener('keydown', (event) => {
         case 'KeyW':
             if(!keys.up.pressed && player.player.action.jump.count <2){
             player.player.velocity.y = -25
-            
+            keys.up.pressed = true;
+            player.player.action.jump.count ++;
             }
             player.player.action.stand.left = false;
             player.player.action.stand.right = false;
@@ -196,27 +197,30 @@ window.addEventListener('keydown', (event) => {
             if (!player.player.direction.forward) {
                 player.player.action.jump.left = true;
             } else player.player.action.jump.right = true;
-            keys.up.pressed = true;
-            player.player.action.jump.count ++;
+
             
             break;
         case 'KeyA':
+            if(!keys.right.pressed){
             keys.left.pressed = true;
             player.player.direction.forward = false;
             player.player.action.stand.left = false;
             player.player.action.stand.right = false;
             player.player.action.run.left = true;
             player.player.action.run.right = false;
+            }
             break;
         case 'KeyS':
                 break;      
         case 'KeyD':
+            if(!keys.left.pressed){
             keys.right.pressed = true;
             player.player.direction.forward = true;
             player.player.action.stand.left = false;
             player.player.action.stand.right = false;
             player.player.action.run.left = false;
             player.player.action.run.right = true;
+            }
             break;
         // Other key event handling
     }
