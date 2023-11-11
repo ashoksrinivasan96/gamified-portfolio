@@ -68,8 +68,13 @@ useEffect(()=> {
     
   };
 let animationFrameId;
+let lastTimestamp = 0;
+const fps = 80;
 
-    const animate = () => {
+    const animate = (timestamp) => {
+        const deltaTime = timestamp - lastTimestamp;
+        if (deltaTime > 1000 / fps) {
+            lastTimestamp = timestamp;
         animationFrameId = requestAnimationFrame(animate);
         
         backgroundScenery.forEach((scenery) =>{
@@ -158,6 +163,9 @@ let animationFrameId;
         restartGame();
     }
 }
+else animationFrameId = requestAnimationFrame(animate);
+
+    }
 
 const stopAnimation = () => {
     cancelAnimationFrame(animationFrameId);

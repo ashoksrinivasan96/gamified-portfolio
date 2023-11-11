@@ -68,22 +68,22 @@ const Player = ({canvasContext}, {...data}) => {
       
         if (player.action.stand.left) {
           img.src = images.samuraiIdleLeft.src;
-          player.totalFrames = 5;
+          player.totalFrames = 6;
         } else if (player.action.stand.right) {
           img.src = images.samuraiIdleRight.src;
-          player.totalFrames = 5;
+          player.totalFrames = 6;
         } else if (player.action.run.left) {
           img.src = images.samuraiRunLeft.src;
-          player.totalFrames = 7;
+          player.totalFrames = 8;
         } else if (player.action.run.right) {
           img.src = images.samuraiRunRight.src;
-          player.totalFrames = 7;
+          player.totalFrames = 8;
         } else if (player.action.jump.left) {
           img.src = images.samuraiJumpLeft.src;
-          player.totalFrames = 11;
+          player.totalFrames = 12;
         } else if (player.action.jump.right) {
           img.src = images.samuraiJumpRight.src;
-          player.totalFrames = 11;
+          player.totalFrames = 12;
         }
 
         return img;
