@@ -25,6 +25,7 @@ let scrollLength = 0;
 
 let gameOver = false;
 
+
 const keys = {
     right: {
         pressed: false
@@ -76,7 +77,7 @@ let animationFrameId;
         })
         platforms.forEach((platform) => {
             platform.drawPlatform();
-            console.log(platform.platform.collision)
+         
         })
         
         player.updatePlayer();
@@ -135,16 +136,17 @@ let animationFrameId;
         }
         //collision detection logic
         platforms.forEach((platform) => {
-        if(player.player.position.y + player.player.height <= platform.platform.position.y 
-            && player.player.position.y +player.player.height+player.player.velocity.y >= platform.platform.position.y
-            && player.player.position.x + player.player.width >= platform.platform.position.x
-            && player.player.position.x <= platform.platform.position.x + platform.platform.width
-        ){
-              
-            player.player.velocity.y = 0;
-
-        }
-    })
+            if (
+                player.player.position.y + player.player.height <= platform.platform.position.y &&
+                player.player.position.y + player.player.height + player.player.velocity.y >= platform.platform.position.y &&
+                player.player.position.x + player.player.width > platform.platform.position.x &&
+                player.player.position.x < platform.platform.position.x + platform.platform.width
+            ) {
+                // Character is colliding with the platform from above
+                player.player.velocity.y = 0;
+                player.player.position.y = platform.platform.position.y - player.player.height;
+            }
+        });
     // win condition
     if(scrollLength >= 10750){
         gameOver = true;

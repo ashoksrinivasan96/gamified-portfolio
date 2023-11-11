@@ -6,9 +6,9 @@ import backgroundImg from '../assets/background.png'
 import backgroundImgLight from '../assets/Backgroundlight.png'
 
 export const getPlatformConfig = (canvasContext) => [
-    { x: 100, y: canvasContext.canvas.height - 75, img: platformImg},
-    { x: 500, y: canvasContext.canvas.height - 75, img: platformImg},
-    { x: 1000, y: canvasContext.canvas.height - 75, img: platformImg},
+    { x: 50, y: canvasContext.canvas.height - 75, img: platformImg},
+    { x: 500, y: canvasContext.canvas.height - 275, img: platformImg},
+    { x: 100, y: canvasContext.canvas.height - 700, img: platformImg},
     { x: 1460, y: canvasContext.canvas.height - 125, img: platformImg2, height:150 },
     { x: 1460, y: canvasContext.canvas.height - 225, img: platformImg },
     { x: 1860, y: canvasContext.canvas.height - 125, img: platformImg6, height:150 },

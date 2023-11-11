@@ -4,7 +4,7 @@ import samuraiRunRight from '../assets/Samurai/RunRight.png'
 import samuraiRunLeft from '../assets/Samurai/RunLeft.png'
 import samuraiJumpRight from '../assets/Samurai/JumpRight.png';
 import samuraiJumpLeft from '../assets/Samurai/JumpLeft.png';
-import React, { useEffect, useState } from 'react';
+
 //preloading images
 const images = {
   samuraiIdleLeft: new Image(),
@@ -29,7 +29,7 @@ const Player = ({canvasContext}, {...data}) => {
             x: 100,
             y: canvasContext.canvas.height - 405
         },
-        width : 128,
+        width : 64,
         height : 128,
         velocity: {
             x: 0,
