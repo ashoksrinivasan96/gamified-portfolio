@@ -14,7 +14,7 @@ const Scenery = ({canvasContext},{...data}) => {
     }
     const img = new Image();
     img.src = data.img;
-
+    
     const drawScenery = () => {
     canvasContext.context.drawImage(img, scenery.position.x, scenery.position.y, scenery.width, scenery.height);
     }
