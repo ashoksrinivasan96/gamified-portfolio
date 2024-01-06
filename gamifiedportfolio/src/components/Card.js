@@ -5,7 +5,7 @@ import scroll from '../assets/scroll.png';
 const Card = () => {
   return (
     
-      <div className='bg-center bg-cover min-h-[40rem] min-w-[60rem]' style={{ backgroundImage: `url(${scroll})` }}>
+      <div className='bg-center bg-cover min-h-[32rem] min-w-[52rem]' style={{ backgroundImage: `url(${scroll})` }}>
         <ul className= "text-center font-mono text-white pt-[10rem]">
           <li>Use the 'W', 'A', 'S', 'D' keys to control the player.</li>
           <li>Press 'W' to jump, 'A' to move left, 'D' to move right.</li>
